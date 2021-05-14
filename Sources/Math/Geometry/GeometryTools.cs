@@ -57,7 +57,7 @@ namespace AForge.Math.Geometry
         public static float GetAngleBetweenLines( Point a1, Point a2, Point b1, Point b2 )
         {
             Line line1 = Line.FromPoints( a1, a2 );
-            return line1.GetAngleBetweenLines( Line.FromPoints( b1, b2 ) );
+            return (float)line1.GetAngleBetweenLines( Line.FromPoints( b1, b2 ) );
         }
     }
 }

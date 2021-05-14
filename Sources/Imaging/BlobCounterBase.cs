@@ -672,6 +672,7 @@ namespace AForge.Imaging
                 ( image.PixelFormat != PixelFormat.Format8bppIndexed ) &&
                 ( image.PixelFormat != PixelFormat.Format32bppRgb ) &&
                 ( image.PixelFormat != PixelFormat.Format32bppArgb ) &&
+                ( image.PixelFormat != PixelFormat.Format32bppRgb ) &&
                 ( image.PixelFormat != PixelFormat.Format32bppPArgb )
                 )
                 throw new UnsupportedImageFormatException( "Unsupported pixel format of the provided image." );
@@ -1246,7 +1247,7 @@ namespace AForge.Imaging
                 for ( int j = 1; j <= objectsCount; j++ )
                 {
                     meanR[j] = meanB[j] = meanG[j];
-                    stdDevR[j] = stdDevB[j] = stdDevG[j];
+                    stdDevR[j] = stdDevB[j] = meanG[j];
                 }
             }
             else

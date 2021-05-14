@@ -59,6 +59,18 @@ namespace AForge
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Point"/> structure.
+        /// </summary>
+        /// 
+        /// <param name="x">X axis coordinate.</param>
+        /// <param name="y">Y axis coordinate.</param>
+        /// 
+        public Point(double x, double y)
+        {
+            this.X = (float)x;
+            this.Y = (float)y;
+        }
+        /// <summary>
         /// Calculate Euclidean distance between two points.
         /// </summary>
         /// 
@@ -73,23 +85,6 @@ namespace AForge
             float dy = Y - anotherPoint.Y;
 
             return (float) System.Math.Sqrt( dx * dx + dy * dy );
-        }
-
-        /// <summary>
-        /// Calculate squared Euclidean distance between two points.
-        /// </summary>
-        /// 
-        /// <param name="anotherPoint">Point to calculate distance to.</param>
-        /// 
-        /// <returns>Returns squared Euclidean distance between this point and
-        /// <paramref name="anotherPoint"/> points.</returns>
-        /// 
-        public float SquaredDistanceTo( Point anotherPoint )
-        {
-            float dx = X - anotherPoint.X;
-            float dy = Y - anotherPoint.Y;
-
-            return dx * dx + dy * dy;
         }
 
         /// <summary>

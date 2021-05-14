@@ -8,7 +8,6 @@
 
 namespace AForge.Controls
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Drawing;
@@ -357,7 +356,7 @@ namespace AForge.Controls
         public void UpdateDataSeries( string name, double[,] data )
         {
             if ( !seriesTable.ContainsKey( name ) )
-                throw new ArgumentException( "The chart does not contain data series with name: " + name );
+                throw new System.ArgumentException( "The chart does not contain data series with name: " + name );
 
             // get data series
             DataSeries	series = seriesTable[name];

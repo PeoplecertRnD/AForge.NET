@@ -72,7 +72,6 @@ namespace AForge.Controls
 
         private Size frameSize = new Size( 320, 240 );
         private bool autosize = false;
-        private bool keepRatio = false; 
         private bool needSizeUpdate = false;
         private bool firstFrameNotProcessed = true;
         private volatile bool requestedToStop = false;
@@ -82,6 +81,7 @@ namespace AForge.Controls
 
         // dummy object to lock for synchronization
         private object sync = new object( );
+        private bool paused = false;
 
         /// <summary>
         /// Auto size control or not.
@@ -104,21 +104,6 @@ namespace AForge.Controls
             {
                 autosize = value;
                 UpdatePosition( );
-            }
-        }
-        
-        /// <summary>
-        /// Gets or sets whether the player should keep the aspect ratio of the images being shown.
-        /// </summary>
-        /// 
-        [DefaultValue( false )]
-        public bool KeepAspectRatio
-        {
-            get { return keepRatio; }
-            set
-            {
-                keepRatio = value;
-                Invalidate( );
             }
         }
 
@@ -285,6 +270,22 @@ namespace AForge.Controls
         }
 
         /// <summary>
+        /// Stops the New_Frame event from updating the frame
+        /// </summary>
+        public void Pause()
+        {
+            paused = true;
+        }
+
+        /// <summary>
+        /// Resumes the updating of frames in New_Frame event
+        /// </summary>
+        public void Resume()
+        {
+            paused = false;
+        }
+
+        /// <summary>
         /// Start video source and displaying its frames.
         /// </summary>
         public void Start( )
@@ -399,14 +400,9 @@ namespace AForge.Controls
             }
         }
 
-        // Paint control
+        // Paing control
         private void VideoSourcePlayer_Paint( object sender, PaintEventArgs e )
         {
-            if ( !Visible )
-            {
-                return;
-            }
-
             // is it required to update control's size/position
             if ( ( needSizeUpdate ) || ( firstFrameNotProcessed ) )
             {
@@ -427,33 +423,9 @@ namespace AForge.Controls
                 {
                     if ( ( currentFrame != null ) && ( lastMessage == null ) )
                     {
-                        Bitmap frame = ( convertedFrame != null ) ? convertedFrame : currentFrame;
-
-                        if ( keepRatio )
-                        {
-                            double ratio = (double) frame.Width / frame.Height;
-                            Rectangle newRect = rect;
-
-                            if ( rect.Width < rect.Height * ratio )
-                            {
-                                newRect.Height = (int) ( rect.Width / ratio );
-                            }
-                            else
-                            {
-                                newRect.Width = (int) ( rect.Height * ratio );
-                            }
-
-                            newRect.X = ( rect.Width - newRect.Width ) / 2;
-                            newRect.Y = ( rect.Height - newRect.Height ) / 2;
-
-                            g.DrawImage( frame, newRect.X + 1, newRect.Y + 1, newRect.Width - 2, newRect.Height - 2);
-                        }
-                        else
-                        {
-                            // draw current frame
-                            g.DrawImage( frame, rect.X + 1, rect.Y + 1, rect.Width - 2, rect.Height - 2);
-                        }
-
+                        // draw current frame
+                        g.DrawImage( ( convertedFrame != null ) ? convertedFrame : currentFrame,
+                            rect.X + 1, rect.Y + 1, rect.Width - 2, rect.Height - 2 );
                         firstFrameNotProcessed = false;
                     }
                     else
@@ -492,7 +464,7 @@ namespace AForge.Controls
         // On new frame ready
         private void videoSource_NewFrame( object sender, NewFrameEventArgs eventArgs )
         {
-            if ( !requestedToStop )
+            if ( !requestedToStop && !paused)
             {
                 Bitmap newFrame = (Bitmap) eventArgs.Frame.Clone( );
 

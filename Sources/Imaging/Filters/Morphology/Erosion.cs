@@ -5,7 +5,6 @@
 // Copyright © Andrew Kirillov, 2005-2014
 // aforge.net@gmail.com
 //
-
 namespace AForge.Imaging.Filters
 {
     using System;
@@ -130,9 +129,6 @@ namespace AForge.Imaging.Filters
             // structuring element's radius
             int r = size >> 1;
 
-            // flag to indicate if at least one pixel for the given structuring element was found
-            bool foundSomething;
-
             if ( ( pixelFormat == PixelFormat.Format8bppIndexed ) || ( pixelFormat == PixelFormat.Format24bppRgb ) )
             {
                 int pixelSize = ( pixelFormat == PixelFormat.Format8bppIndexed ) ? 1 : 3;
@@ -167,7 +163,6 @@ namespace AForge.Imaging.Filters
                         for ( int x = startX; x < stopX; x++, src++, dst++ )
                         {
                             min = 255;
-                            foundSomething = false;
 
                             // for each structuring element's row
                             for ( i = 0; i < size; i++ )
@@ -195,7 +190,6 @@ namespace AForge.Imaging.Filters
                                     {
                                         if ( se[i, j] == 1 )
                                         {
-                                            foundSomething = true;
                                             // get new MIN value
                                             v = src[ir * srcStride + jr];
                                             if ( v < min )
@@ -205,7 +199,7 @@ namespace AForge.Imaging.Filters
                                 }
                             }
                             // result pixel
-                            *dst = ( foundSomething ) ? min : *src;
+                            *dst = min;
                         }
                     }
                 }
@@ -229,7 +223,6 @@ namespace AForge.Imaging.Filters
                         for ( int x = startX; x < stopX; x++, src += 3, dst += 3 )
                         {
                             minR = minG = minB = 255;
-                            foundSomething = false;
 
                             // for each structuring element's row
                             for ( i = 0; i < size; i++ )
@@ -257,7 +250,6 @@ namespace AForge.Imaging.Filters
                                     {
                                         if ( se[i, j] == 1 )
                                         {
-                                            foundSomething = true;
                                             // get new MIN values
                                             p = &src[ir * srcStride + jr * 3];
 
@@ -280,18 +272,9 @@ namespace AForge.Imaging.Filters
                                 }
                             }
                             // result pixel
-                            if ( foundSomething )
-                            {
-                                dst[RGB.R] = minR;
-                                dst[RGB.G] = minG;
-                                dst[RGB.B] = minB;
-                            }
-                            else
-                            {
-                                dst[RGB.R] = src[RGB.R];
-                                dst[RGB.G] = src[RGB.G];
-                                dst[RGB.B] = src[RGB.B];
-                            }
+                            dst[RGB.R] = minR;
+                            dst[RGB.G] = minG;
+                            dst[RGB.B] = minB;
                         }
                     }
                 }
@@ -330,7 +313,6 @@ namespace AForge.Imaging.Filters
                         for ( int x = startX; x < stopX; x++, src++, dst++ )
                         {
                             min = 65535;
-                            foundSomething = false;
 
                             // for each structuring element's row
                             for ( i = 0; i < size; i++ )
@@ -358,7 +340,6 @@ namespace AForge.Imaging.Filters
                                     {
                                         if ( se[i, j] == 1 )
                                         {
-                                            foundSomething = true;
                                             // get new MIN value
                                             v = src[ir * srcStride + jr];
                                             if ( v < min )
@@ -368,8 +349,7 @@ namespace AForge.Imaging.Filters
                                 }
                             }
                             // result pixel
-                            *dst = ( foundSomething ) ? min : *src;
-
+                            *dst = min;
                         }
                     }
                 }
@@ -383,7 +363,7 @@ namespace AForge.Imaging.Filters
                         ushort* src = baseSrc + y * srcStride;
                         ushort* dst = baseDst + y * dstStride;
 
-                        ushort  minR, minG, minB, v;
+                        ushort minR, minG, minB, v;
                         ushort* p;
 
                         // loop and array indexes
@@ -393,7 +373,6 @@ namespace AForge.Imaging.Filters
                         for ( int x = startX; x < stopX; x++, src += 3, dst += 3 )
                         {
                             minR = minG = minB = 65535;
-                            foundSomething = false;
 
                             // for each structuring element's row
                             for ( i = 0; i < size; i++ )
@@ -421,7 +400,6 @@ namespace AForge.Imaging.Filters
                                     {
                                         if ( se[i, j] == 1 )
                                         {
-                                            foundSomething = true;
                                             // get new MIN values
                                             p = &src[ir * srcStride + jr * 3];
 
@@ -444,18 +422,9 @@ namespace AForge.Imaging.Filters
                                 }
                             }
                             // result pixel
-                            if ( foundSomething )
-                            {
-                                dst[RGB.R] = minR;
-                                dst[RGB.G] = minG;
-                                dst[RGB.B] = minB;
-                            }
-                            else
-                            {
-                                dst[RGB.R] = src[RGB.R];
-                                dst[RGB.G] = src[RGB.G];
-                                dst[RGB.B] = src[RGB.B];
-                            }
+                            dst[RGB.R] = minR;
+                            dst[RGB.G] = minG;
+                            dst[RGB.B] = minB;
                         }
                     }
                 }

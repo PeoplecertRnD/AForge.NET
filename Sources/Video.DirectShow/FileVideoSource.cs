@@ -288,9 +288,12 @@ namespace AForge.Video.DirectShow
         {
             if ( thread != null )
             {
-                // wait for thread stop
-                thread.Join( );
-
+                try  //Stas
+                {
+                    // wait for thread stop
+                    thread.Join();
+                }
+                catch { }
                 Free( );
             }
         }
@@ -311,7 +314,11 @@ namespace AForge.Video.DirectShow
         {
             if ( this.IsRunning )
             {
-                thread.Abort( );
+                try  //stas
+                {
+                    thread.Abort();
+                }
+                catch { }
                 WaitForStop( );
             }
         }
@@ -405,7 +412,7 @@ namespace AForge.Video.DirectShow
                         throw new ApplicationException( "Did not find acceptable output video pin in the given source" );
                     }
 
-                    if ( graph.Connect( outPin, inPin ) < 0 )
+                    if ( graph.Connect( outPin, inPin ) < 0 ) 
                     {
                         Marshal.ReleaseComObject( outPin );
                         outPin = null;

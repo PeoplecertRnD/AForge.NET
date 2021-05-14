@@ -209,7 +209,9 @@ namespace AForge.Video.DirectShow
             {
                 VideoCapabilities caps = videoCapabilitiesDictionary[(string) videoResolutionsCombo.SelectedItem];
 
-                videoDevice.VideoResolution = caps;
+                videoDevice.DesiredFrameSize = caps.FrameSize;
+                videoDevice.DesiredFrameRate = caps.FrameRate;
+
                 captureSize = caps.FrameSize;
             }
 
@@ -221,7 +223,7 @@ namespace AForge.Video.DirectShow
                     VideoCapabilities caps = snapshotCapabilitiesDictionary[(string) snapshotResolutionsCombo.SelectedItem];
 
                     videoDevice.ProvideSnapshots = true;
-                    videoDevice.SnapshotResolution = caps;
+                    videoDevice.DesiredSnapshotSize = caps.FrameSize;
 
                     snapshotSize = caps.FrameSize;
                 }
@@ -280,6 +282,13 @@ namespace AForge.Video.DirectShow
                     if ( !videoCapabilitiesDictionary.ContainsKey( item ) )
                     {
                         videoCapabilitiesDictionary.Add( item, capabilty );
+                    }
+                    else
+                    {
+                        if ( capabilty.FrameRate > videoCapabilitiesDictionary[item].FrameRate )
+                        {
+                            videoCapabilitiesDictionary[item] = capabilty;
+                        }
                     }
                 }
 

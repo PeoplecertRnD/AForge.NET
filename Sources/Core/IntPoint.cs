@@ -67,29 +67,12 @@ namespace AForge
         /// <returns>Returns Euclidean distance between this point and
         /// <paramref name="anotherPoint"/> points.</returns>
         /// 
-        public float DistanceTo( IntPoint anotherPoint )
+        public Double DistanceTo( IntPoint anotherPoint )
         {
             int dx = X - anotherPoint.X;
             int dy = Y - anotherPoint.Y;
 
-            return (float) System.Math.Sqrt( dx * dx + dy * dy );
-        }
-
-        /// <summary>
-        /// Calculate squared Euclidean distance between two points.
-        /// </summary>
-        /// 
-        /// <param name="anotherPoint">Point to calculate distance to.</param>
-        /// 
-        /// <returns>Returns squared Euclidean distance between this point and
-        /// <paramref name="anotherPoint"/> points.</returns>
-        /// 
-        public float SquaredDistanceTo( Point anotherPoint )
-        {
-            float dx = X - anotherPoint.X;
-            float dy = Y - anotherPoint.Y;
-
-            return dx * dx + dy * dy;
+            return  System.Math.Sqrt( dx * dx + dy * dy );
         }
 
         /// <summary>

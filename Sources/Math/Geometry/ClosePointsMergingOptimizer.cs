@@ -94,7 +94,7 @@ namespace AForge.Math.Geometry
             }
             else
             {
-                float distance = 0;
+                double distance = 0;
 
                 // add first point to the new shape
                 optimizedShape.Add( shape[0] );

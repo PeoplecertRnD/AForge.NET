@@ -157,7 +157,7 @@ namespace AForge.Imaging.Filters
         }
 
         /// <summary>
-        /// Determines smoothing power within a color domain (neighbor pixels of similar color), >= 1.
+        /// Determines smoothing power within a color domain (neighbor pixels of similar color).
         /// </summary>
         /// 
         /// <remarks>
@@ -172,13 +172,13 @@ namespace AForge.Imaging.Filters
             }
             set
             {
-                spatialFactor = Math.Max( 1, value );
+                spatialFactor = value;
                 spatialPropertiesChanged = true;
             }
         }
 
         /// <summary>
-        /// Exponent power, used in Spatial function calculation, >= 1.
+        /// Exponent power, used in Spatial function calculation.
         /// </summary>
         /// 
         /// <remarks>
@@ -193,13 +193,13 @@ namespace AForge.Imaging.Filters
             }
             set
             {
-                spatialPower = Math.Max( 1, value );
+                spatialPower = value;
                 spatialPropertiesChanged = true;
             }
         }
 
         /// <summary>
-        /// Determines the variance of color for a color domain, >= 1.
+        /// Determines the variance of color for a color domain .
         /// </summary>
         /// 
         /// <remarks>
@@ -214,13 +214,13 @@ namespace AForge.Imaging.Filters
             }
             set
             {
-                colorFactor = Math.Max( 1, value );
+                colorFactor = value;
                 colorPropertiesChanged = true;
             }
         }
 
         /// <summary>
-        /// Exponent power, used in Color function calculation, >= 1.
+        /// Exponent power, used in Color function calculation.
         /// </summary>
         /// 
         /// <remarks>
@@ -235,7 +235,7 @@ namespace AForge.Imaging.Filters
             }
             set
             {
-                colorPower = Math.Max( 1, value );
+                colorPower = value;
                 colorPropertiesChanged = true;
             }
         }

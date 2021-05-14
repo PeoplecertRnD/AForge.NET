@@ -67,14 +67,16 @@ namespace AForge.Imaging.Filters
 
             Bitmap dstImage = null;
 
+
+
+
             try
             {
                 // apply the filter
                 dstImage = Apply( srcData );
-                if ( ( image.HorizontalResolution > 0 ) && ( image.VerticalResolution > 0 ) )
-                {
-                    dstImage.SetResolution( image.HorizontalResolution, image.VerticalResolution );
-                }
+                dstImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+                foreach (PropertyItem propItem in image.PropertyItems)
+                    dstImage.SetPropertyItem(propItem);
             }
             finally
             {

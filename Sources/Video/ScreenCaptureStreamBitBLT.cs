@@ -13,40 +13,40 @@ namespace AForge.Video
 {
     using System;
     using System.Drawing;
+    using System.Windows.Forms;
     using System.Drawing.Imaging;
     using System.Threading;
-    using System.Windows.Forms;
 
     /// <summary>
     /// Screen capture video source.
     /// </summary>
-    ///
+    /// 
     /// <remarks><para>The video source constantly captures the desktop screen.</para>
-    ///
+    /// 
     /// <para>Sample usage:</para>
     /// <code>
     /// // get entire desktop area size
     /// Rectangle screenArea = Rectangle.Empty;
-    /// foreach ( System.Windows.Forms.Screen screen in
+    /// foreach ( System.Windows.Forms.Screen screen in 
     ///           System.Windows.Forms.Screen.AllScreens )
     /// {
     ///     screenArea = Rectangle.Union( screenArea, screen.Bounds );
     /// }
-    ///
+    ///     
     /// // create screen capture video source
     /// ScreenCaptureStream stream = new ScreenCaptureStream( screenArea );
-    ///
+    /// 
     /// // set NewFrame event handler
     /// stream.NewFrame += new NewFrameEventHandler( video_NewFrame );
-    ///
+    /// 
     /// // start the video source
     /// stream.Start( );
-    ///
+    /// 
     /// // ...
     /// // signal to stop
     /// stream.SignalToStop( );
     /// // ...
-    ///
+    /// 
     /// private void video_NewFrame( object sender, NewFrameEventArgs eventArgs )
     /// {
     ///     // get new frame
@@ -55,57 +55,59 @@ namespace AForge.Video
     /// }
     /// </code>
     /// </remarks>
-    ///
-    public class ScreenCaptureStream : IVideoSource
+    /// 
+    public class ScreenCaptureStreamBitBLT : IVideoSource
     {
         private Rectangle region;
+        private Size outputSize;
+        CaptureScreen.CaptureScreen.CaptureRectangle captureRectangle;
 
         // frame interval in milliseconds
         private int frameInterval = 100;
-
         // received frames count
         private int framesReceived;
 
+       
         private Thread thread = null;
         private ManualResetEvent stopEvent = null;
 
-        private SolidBrush brush = new SolidBrush(Color.Red);
+        SolidBrush brush = new SolidBrush(Color.Red);
 
         /// <summary>
         /// New frame event.
         /// </summary>
-        ///
+        /// 
         /// <remarks><para>Notifies clients about new available frame from video source.</para>
-        ///
+        /// 
         /// <para><note>Since video source may have multiple clients, each client is responsible for
         /// making a copy (cloning) of the passed video frame, because the video source disposes its
         /// own original copy after notifying of clients.</note></para>
         /// </remarks>
-        ///
+        /// 
         public event NewFrameEventHandler NewFrame;
 
         /// <summary>
         /// Video source error event.
         /// </summary>
-        ///
+        /// 
         /// <remarks>This event is used to notify clients about any type of errors occurred in
         /// video source object, for example internal exceptions.</remarks>
-        ///
+        /// 
         public event VideoSourceErrorEventHandler VideoSourceError;
 
         /// <summary>
         /// Video playing finished event.
         /// </summary>
-        ///
+        /// 
         /// <remarks><para>This event is used to notify clients that the video playing has finished.</para>
         /// </remarks>
-        ///
+        /// 
         public event PlayingFinishedEventHandler PlayingFinished;
 
         /// <summary>
         /// Video source.
         /// </summary>
-        ///
+        /// 
         public virtual string Source
         {
             get { return "Screen Capture"; }
@@ -114,13 +116,13 @@ namespace AForge.Video
         /// <summary>
         /// Gets or sets the screen capture region.
         /// </summary>
-        ///
+        /// 
         /// <remarks><para>This property specifies which region (rectangle) of the screen to capture. It may cover multiple displays
         /// if those are available in the system.</para>
-        ///
+        /// 
         /// <para><note>The property must be set before starting video source to have any effect.</note></para>
         /// </remarks>
-        ///
+        /// 
         public Rectangle Region
         {
             get { return region; }
@@ -130,15 +132,15 @@ namespace AForge.Video
         /// <summary>
         /// Time interval between making screen shots, ms.
         /// </summary>
-        ///
+        /// 
         /// <remarks><para>The property specifies time interval in milliseconds between consequent screen captures.
         /// Expected frame rate of the stream should be approximately 1000/FrameInteval.</para>
-        ///
+        /// 
         /// <para>If the property is set to 0, then the stream will capture screen as fast as the system allows.</para>
-        ///
+        /// 
         /// <para>Default value is set to <b>100</b>.</para>
         /// </remarks>
-        ///
+        /// 
         public int FrameInterval
         {
             get { return frameInterval; }
@@ -148,11 +150,11 @@ namespace AForge.Video
         /// <summary>
         /// Received frames count.
         /// </summary>
-        ///
+        /// 
         /// <remarks>Number of frames the video source provided from the moment of the last
         /// access to the property.
         /// </remarks>
-        ///
+        /// 
         public int FramesReceived
         {
             get
@@ -166,10 +168,10 @@ namespace AForge.Video
         /// <summary>
         /// Received bytes count.
         /// </summary>
-        ///
+        /// 
         /// <remarks><para><note>The property is not implemented for this video source and always returns 0.</note></para>
         /// </remarks>
-        ///
+        /// 
         public long BytesReceived
         {
             get { return 0; }
@@ -178,9 +180,9 @@ namespace AForge.Video
         /// <summary>
         /// State of the video source.
         /// </summary>
-        ///
+        /// 
         /// <remarks>Current state of video source object - running or not.</remarks>
-        ///
+        /// 
         public bool IsRunning
         {
             get
@@ -201,37 +203,36 @@ namespace AForge.Video
         /// <summary>
         /// Initializes a new instance of the <see cref="ScreenCaptureStream"/> class.
         /// </summary>
-        ///
-        /// <param name="region">Screen's rectangle to capture (the rectangle may cover multiple displays).</param>
-        ///
-        public ScreenCaptureStream(Rectangle region)
+        /// 
+        public ScreenCaptureStreamBitBLT(CaptureScreen.CaptureScreen.CaptureRectangle captureRectangle, int desiredFPS)
         {
-            this.region = region;
+            this.captureRectangle = captureRectangle;
+            this.FrameInterval = 1000 / desiredFPS;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScreenCaptureStream"/> class.
         /// </summary>
-        ///
-        /// <param name="region">Screen's rectangle to capture (the rectangle may cover multiple displays).</param>
-        /// <param name="frameInterval">Time interval between making screen shots, ms.</param>
-        ///
-        public ScreenCaptureStream(Rectangle region, int frameInterval)
+        /// <param name="captureRectangle"></param>
+        /// <param name="desiredFPS"></param>
+        /// <param name="outputSize"></param>
+        public ScreenCaptureStreamBitBLT(CaptureScreen.CaptureScreen.CaptureRectangle captureRectangle, int desiredFPS, Size outputSize)
         {
-            this.region = region;
-            this.FrameInterval = frameInterval;
+            this.captureRectangle = captureRectangle;
+            this.FrameInterval = 1000 / desiredFPS;
+            this.outputSize = outputSize;
         }
 
         /// <summary>
         /// Start video source.
         /// </summary>
-        ///
+        /// 
         /// <remarks>Starts video source and return execution to caller. Video source
         /// object creates background thread and notifies about new frames with the
         /// help of <see cref="NewFrame"/> event.</remarks>
-        ///
+        /// 
         /// <exception cref="ArgumentException">Video source is not specified.</exception>
-        ///
+        /// 
         public void Start()
         {
             if (!IsRunning)
@@ -251,10 +252,10 @@ namespace AForge.Video
         /// <summary>
         /// Signal video source to stop its work.
         /// </summary>
-        ///
+        /// 
         /// <remarks>Signals video source to stop its background thread, stop to
         /// provide new frames and free resources.</remarks>
-        ///
+        /// 
         public void SignalToStop()
         {
             // stop thread
@@ -268,10 +269,10 @@ namespace AForge.Video
         /// <summary>
         /// Wait for video source has stopped.
         /// </summary>
-        ///
+        /// 
         /// <remarks>Waits for source stopping after it was signalled to stop using
         /// <see cref="SignalToStop"/> method.</remarks>
-        ///
+        /// 
         public void WaitForStop()
         {
             if (thread != null)
@@ -286,15 +287,15 @@ namespace AForge.Video
         /// <summary>
         /// Stop video source.
         /// </summary>
-        ///
+        /// 
         /// <remarks><para>Stops video source aborting its thread.</para>
-        ///
+        /// 
         /// <para><note>Since the method aborts background thread, its usage is highly not preferred
         /// and should be done only if there are no other options. The correct way of stopping camera
         /// is <see cref="SignalToStop">signaling it stop</see> and then
         /// <see cref="WaitForStop">waiting</see> for background thread's completion.</note></para>
         /// </remarks>
-        ///
+        /// 
         public void Stop()
         {
             if (this.IsRunning)
@@ -308,7 +309,7 @@ namespace AForge.Video
         /// <summary>
         /// Free resource.
         /// </summary>
-        ///
+        /// 
         private void Free()
         {
             thread = null;
@@ -321,20 +322,25 @@ namespace AForge.Video
         // Worker thread
         private void WorkerThread()
         {
+            region = CaptureScreen.CaptureScreen.GetEntireDesktop();
             int width = region.Width;
             int height = region.Height;
             int x = region.Location.X;
             int y = region.Location.Y;
             Size size = region.Size;
 
-            Bitmap bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-            Graphics graphics = Graphics.FromImage(bitmap);
+            if (outputSize == null)
+            {
+                outputSize = new Size(width, height);
+            }
+
+            Bitmap bitmap = new Bitmap(outputSize.Width, outputSize.Height, PixelFormat.Format32bppArgb);
 
             // download start time and duration
             DateTime start;
             TimeSpan span;
 
-            while (!stopEvent.WaitOne(0, false))
+            while (!stopEvent.WaitOne(100, false))
             {
                 // set dowbload start time
                 start = DateTime.Now;
@@ -342,9 +348,7 @@ namespace AForge.Video
                 try
                 {
                     // capture the screen
-                    graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                    graphics.CopyFromScreen(Screen.PrimaryScreen.Bounds.X, Screen.PrimaryScreen.Bounds.Y, 0, 0, Screen.PrimaryScreen.Bounds.Size, CopyPixelOperation.SourceCopy);
-                    //graphics.DrawString(DateTime.Now.ToString(), new Font(FontFamily.GenericSerif, 16), brush, new PointF(5, 5));
+                    bitmap = new Bitmap(CaptureScreen.CaptureScreen.GetDesktopImage(captureRectangle), outputSize);
 
                     // increment frames counter
                     framesReceived++;
@@ -391,7 +395,6 @@ namespace AForge.Video
             }
 
             // release resources
-            graphics.Dispose();
             bitmap.Dispose();
 
             if (PlayingFinished != null)

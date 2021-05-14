@@ -105,9 +105,9 @@ namespace AForge.Math.Geometry
         /// <see cref="Line.DistanceToPoint"/>, this returns the distance from the finite segment. (0,0) is 5 units
         /// from the segment (0,5)-(0,8), but is 0 units from the line through those points.</returns>
         /// 
-        public float DistanceToPoint( Point point )
+        public double DistanceToPoint( Point point )
         {
-            float segmentDistance;
+            double segmentDistance;
 
             switch ( LocateProjection( point ) )
             {

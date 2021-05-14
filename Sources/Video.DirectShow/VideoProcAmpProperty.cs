@@ -13,49 +13,64 @@ namespace AForge.Video.DirectShow
     /// <summary>
     /// The enumeration specifies a setting on a camera.
     /// </summary>
-    public enum CameraControlProperty
+    public enum VideoProcAmpProperty
     {
         /// <summary>
-        /// Pan control.
+        /// Brightness control.
         /// </summary>
-        Pan = 0,
+        Brightness = 0,
 
         /// <summary>
-        /// Tilt control.
+        /// Contrast control.
         /// </summary>
-        Tilt,
+        Contrast,
 
         /// <summary>
-        /// Roll control.
+        /// Hue control.
         /// </summary>
-        Roll,
+        Hue,
 
         /// <summary>
-        /// Zoom control.
+        /// Saturation control.
         /// </summary>
-        Zoom,
+        Saturation,
 
         /// <summary>
-        /// Exposure control.
+        /// Sharpness control.
         /// </summary>
-        Exposure,
+        Sharpness,
 
         /// <summary>
-        /// Iris control.
+        /// Gamma control.
         /// </summary>
-        Iris,
+        Gamma,
 
         /// <summary>
-        /// Focus control.
+        /// ColorEnable control.
         /// </summary>
-        Focus
+        ColorEnable,
+
+        /// <summary>
+        /// WhiteBalance control.
+        /// </summary>
+        WhiteBalance,
+
+        /// <summary>
+        /// BacklightCompensation control.
+        /// </summary>
+        BacklightCompensation,
+
+        /// <summary>
+        /// Gain control.
+        /// </summary>
+        Gain
     }
 
     /// <summary>
     /// The enumeration defines whether a camera setting is controlled manually or automatically.
     /// </summary>
     [Flags]
-    public enum CameraControlFlags
+    public enum VideoProcAmpFlags
     {
         /// <summary>
         /// No control flag.

@@ -54,12 +54,6 @@ namespace AForge.Math.Geometry
         /// 
         public List<IntPoint> FindHull( List<IntPoint> points )
         {
-            // do nothing if there 3 points or less
-            if ( points.Count <= 3 )
-            {
-                return new List<IntPoint>( points );
-            }
-
             List<PointToProcess> pointsToProcess = new List<PointToProcess>( );
 
             // convert input points to points we can process

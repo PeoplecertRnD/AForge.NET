@@ -168,3 +168,16 @@ Sources/Video.VFW/AForge.Video.VFW.xml
 Sources/Video.Ximea/AForge.Video.Ximea.xml
 Sources/Video/AForge.Video.xml
 Sources/Vision/AForge.Vision.xml
+/.vs
+/Sources/Core/Core.NET_Standard_2.1.csproj
+/Sources/Core/Core.NET_4.0.csproj
+/Sources/Controls/Controls.NET_Core_3.1.csproj
+/Sources/Controls/Controls.NET_4.0.csproj
+/Sources/Math/Math.NET_Standard_2.1.csproj
+/Sources/Math/Math.NET_4.0.csproj
+/Sources/Imaging/Imaging.NET_Standard_2.1.csproj
+/Sources/Imaging/Imaging.NET_4.0.csproj
+/Sources/Video/Video.NET_Core_3.1.csproj
+/Sources/Video/Video.NET_4.0.csproj
+/Sources/Video.DirectShow/Video.DirectShow.NET_Core_3.1.csproj
+/Sources/Video.DirectShow/Video.DirectShow.NET_4.0.csproj

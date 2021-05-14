@@ -186,7 +186,7 @@ namespace AForge.Vision.Motion
         /// <param name="gridWidth">Width of motion grid (see <see cref="GridWidth"/> property).</param>
         /// <param name="gridHeight">Height of motion grid (see <see cref="GridHeight"/> property).</param>
         /// 
-        public GridMotionAreaProcessing( int gridWidth, int gridHeight ) : this( gridWidth, gridHeight, true ) { }
+        public GridMotionAreaProcessing( int gridWidth, int gridHeight ) : this( gridWidth, gridWidth, true ) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GridMotionAreaProcessing"/> class.
@@ -245,7 +245,6 @@ namespace AForge.Vision.Motion
 
             if ( ( videoFrame.PixelFormat != PixelFormat.Format8bppIndexed ) &&
                  ( videoFrame.PixelFormat != PixelFormat.Format24bppRgb ) &&
-                 ( videoFrame.PixelFormat != PixelFormat.Format32bppRgb ) &&
                  ( videoFrame.PixelFormat != PixelFormat.Format32bppArgb ) )
             {
                 throw new UnsupportedImageFormatException( "Video frame must be 8 bpp grayscale image or 24/32 bpp color image." );

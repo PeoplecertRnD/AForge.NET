@@ -17,7 +17,6 @@ namespace AForge.Math
     /// <remarks><para>The structure incapsulates X, Y and Z coordinates of a 3D vector and
     /// provides some operations with it.</para></remarks>
     /// 
-    [Serializable]
     public struct Vector3
     {
         /// <summary>

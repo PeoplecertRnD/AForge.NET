@@ -23,8 +23,8 @@ namespace AForge.Math.Geometry
     /// <see cref="Intercept"/>. However, when <see cref="Slope"/> is an Infinity,
     /// <see name="Intercept"/> would normally be meaningless, and it would be
     /// impossible to distinguish the line x = 5 from the line x = -5. Therefore,
-    /// if <see cref="Slope"/> is <see cref="float.PositiveInfinity"/> or
-    /// <see cref="float.NegativeInfinity"/>, the line's equation is instead 
+    /// if <see cref="Slope"/> is <see cref="double.PositiveInfinity"/> or
+    /// <see cref="double.NegativeInfinity"/>, the line's equation is instead 
     /// x = <see cref="Intercept"/>.</para>
     /// 
     /// <para>Sample usage:</para>
@@ -47,8 +47,8 @@ namespace AForge.Math.Geometry
     {
         // line's parameters from its equation: y = k * x + b;
         // If k is an Infinity, the equation is x = b.
-        private readonly float k; // line's slope
-        private readonly float b; // Y-coordinate where line intersects Y-axis
+        private readonly double k; // line's slope
+        private readonly double b; // Y-coordinate where line intersects Y-axis
 
         /// <summary>
         /// Checks if the line vertical or not.
@@ -56,7 +56,7 @@ namespace AForge.Math.Geometry
         ///
         public bool IsVertical
         {
-            get { return float.IsInfinity( k ); }
+            get { return double.IsInfinity( k ); }
         }
 
         /// <summary>
@@ -70,13 +70,13 @@ namespace AForge.Math.Geometry
         /// <summary>
         /// Gets the slope of the line.
         /// </summary>
-        public float Slope { get { return k; } }
+        public double Slope { get { return k; } }
 
         /// <summary>
         /// If not <see cref="IsVertical"/>, gets the Line's Y-intercept.
         /// If <see cref="IsVertical"/> gets the line's X-intercept.
         /// </summary>
-        public float Intercept { get { return b; } }
+        public double Intercept { get { return b; } }
 
         /// <summary>
         /// Creates a <see cref="Line"/>  that goes through the two specified points.
@@ -108,14 +108,34 @@ namespace AForge.Math.Geometry
         /// <remarks><para>The construction here follows the same rules as for the rest of this class.
         /// Most lines are expressed as y = slope * x + intercept. Vertical lines, however, are 
         /// x = intercept. This is indicated by <see cref="IsVertical"/> being true or by 
-        /// <see cref="Slope"/> returning <see cref="float.PositiveInfinity"/> or 
-        /// <see cref="float.NegativeInfinity"/>.</para></remarks>
+        /// <see cref="Slope"/> returning <see cref="double.PositiveInfinity"/> or 
+        /// <see cref="double.NegativeInfinity"/>.</para></remarks>
         /// 
-        public static Line FromSlopeIntercept( float slope, float intercept )
+        public static Line FromSlopeIntercept( double slope, double intercept )
         {
             return new Line( slope, intercept );
         }
 
+        /// <summary>
+        /// Creates a <see cref="Line"/> with the specified slope and intercept.
+        /// </summary>
+        /// 
+        /// <param name="slope">The slope of the line</param>
+        /// <param name="intercept">The Y-intercept of the line, unless the slope is an
+        /// infinity, in which case the line's equation is "x = intercept" instead.</param>
+        /// 
+        /// <returns>Returns a <see cref="Line"/> representing the specified line.</returns>
+        /// 
+        /// <remarks><para>The construction here follows the same rules as for the rest of this class.
+        /// Most lines are expressed as y = slope * x + intercept. Vertical lines, however, are 
+        /// x = intercept. This is indicated by <see cref="IsVertical"/> being true or by 
+        /// <see cref="Slope"/> returning <see cref="double.PositiveInfinity"/> or 
+        /// <see cref="double.NegativeInfinity"/>.</para></remarks>
+        ///
+        public static Line FromSlopeIntercept(float slope, float intercept)
+        {
+            return new Line(/*(float)*/slope, /*(float)*/intercept);
+        }
         /// <summary>
         /// Constructs a <see cref="Line"/> from a radius and an angle (in degrees).
         /// </summary>
@@ -135,7 +155,7 @@ namespace AForge.Math.Geometry
         /// 
         /// <exception cref="ArgumentOutOfRangeException">Thrown if radius is negative.</exception>
         /// 
-        public static Line FromRTheta( float radius, float theta )
+        public static Line FromRTheta( double radius, double theta )
         {
             return new Line( radius, theta, false );
         }
@@ -156,7 +176,7 @@ namespace AForge.Math.Geometry
         /// 
         /// <returns>Returns a <see cref="Line"/> representing the specified line.</returns>
         /// 
-        public static Line FromPointTheta( Point point, float theta )
+        public static Line FromPointTheta( Point point, double theta )
         {
             return new Line( point, theta );
         }
@@ -169,32 +189,32 @@ namespace AForge.Math.Geometry
                 throw new ArgumentException( "Start point of the line cannot be the same as its end point." );
             }
 
-            k = ( end.Y - start.Y ) / ( end.X - start.X );
-            b = float.IsInfinity( k ) ? start.X : start.Y - k * start.X;
+            k = ( end.Y - start.Y ) / ( (double)end.X - start.X );
+            b = double.IsInfinity( k ) ? start.X : start.Y - k * start.X;
         }
 
-        private Line( float slope, float intercept )
+        private Line( double slope, double intercept )
         {
             k = slope;
             b = intercept;
         }
 
-        private Line( float radius, float theta, bool unused )
+        private Line(double radius, double theta, bool unused)
         {
             if ( radius < 0 )
             {
                 throw new ArgumentOutOfRangeException( "radius", radius, "Must be non-negative" );
             }
 
-            theta *= (float) ( Math.PI / 180 );
+            theta *= /*(float)*/ (Math.PI / (double)180);
 
-            float sine = (float) Math.Sin( theta ), cosine = (float) Math.Cos( theta );
+            double sine = /*(float)*/ Math.Sin(theta), cosine = /*(float)*/Math.Cos(theta);
             Point pt1 = new Point( radius * cosine, radius * sine );
 
             // -1/tan, to get the slope of the line, and not the slope of the normal
-            k = -cosine / sine;
+            k = -cosine / (double)sine;
 
-            if ( !float.IsInfinity( k ) )
+            if ( !double.IsInfinity( k ) )
             {
                 b = pt1.Y - k * pt1.X;
             }
@@ -204,13 +224,13 @@ namespace AForge.Math.Geometry
             }
         }
 
-        private Line( Point point, float theta )
+        private Line(Point point, double theta)
         {
-            theta *= (float) ( Math.PI / 180 );
+            theta *= /*(float)*/ (Math.PI / (double)180);
 
-            k = (float) ( -1.0f / Math.Tan( theta ) );
+            k = /*(float)*/(-1.0f / (double)Math.Tan(theta));
 
-            if ( !float.IsInfinity( k ) )
+            if (!double.IsInfinity(k))
             {
                 b = point.Y - k * point.X;
             }
@@ -229,9 +249,9 @@ namespace AForge.Math.Geometry
         /// 
         /// <returns>Returns minimum angle between lines.</returns>
         /// 
-        public float GetAngleBetweenLines( Line secondLine )
+        public double GetAngleBetweenLines(Line secondLine)
         {
-            float k2 = secondLine.k;
+            double k2 = secondLine.k;
 
             bool isVertical1 = IsVertical;
             bool isVertical2 = secondLine.IsVertical;
@@ -240,12 +260,12 @@ namespace AForge.Math.Geometry
             if ( ( k == k2 ) || ( isVertical1 && isVertical2 ) )
                 return 0;
 
-            float angle = 0;
+            double angle = 0;
 
             if ( ( !isVertical1 ) && ( !isVertical2 ) )
             {
-                float tanPhi = ( ( k2 > k ) ? ( k2 - k ) : ( k - k2 ) ) / ( 1 + k * k2 );
-                angle = (float) Math.Atan( tanPhi );
+                double tanPhi = ((k2 > k) ? (k2 - k) : (k - k2)) / (1 + k * k2);
+                angle = /*(float)*/Math.Atan(tanPhi);
             }
             else
             {
@@ -253,16 +273,16 @@ namespace AForge.Math.Geometry
 
                 if ( isVertical1 )
                 {
-                    angle = (float) ( Math.PI / 2 - Math.Atan( k2 ) * Math.Sign( k2 ) );
+                    angle = /*(float)*/(Math.PI / 2 - Math.Atan(k2) * Math.Sign(k2));
                 }
                 else
                 {
-                    angle = (float) ( Math.PI / 2 - Math.Atan( k ) * Math.Sign( k ) );
+                    angle = /*(float)*/(Math.PI / 2 - Math.Atan(k) * Math.Sign(k));
                 }
             }
 
             // convert radians to degrees
-            angle *= (float) ( 180.0 / Math.PI );
+            angle *= /*(float)*/(180.0 / Math.PI);
 
             if ( angle < 0 )
             {
@@ -285,8 +305,8 @@ namespace AForge.Math.Geometry
         /// 
         public Point? GetIntersectionWith( Line secondLine )
         {
-            float k2 = secondLine.k;
-            float b2 = secondLine.b;
+            double k2 = secondLine.k;
+            double b2 = secondLine.b;
 
             bool isVertical1 = IsVertical;
             bool isVertical2 = secondLine.IsVertical;
@@ -313,7 +333,7 @@ namespace AForge.Math.Geometry
                 else
                 {
                     // the intersection is at x=(b2-b1)/(k1-k2), and y=k1*x+b1
-                    float x = ( b2 - b ) / ( k - k2 );
+                    double x = (b2 - b) / (k - k2);
                     intersection = new Point( x, k * x + b );
                 }
             }
@@ -352,13 +372,13 @@ namespace AForge.Math.Geometry
         /// <see cref="LineSegment.DistanceToPoint"/>, this returns the distance from the infinite line. (0,0) is 0 units
         /// from the line defined by (0,5) and (0,8), but is 5 units from the segment with those endpoints.</returns>
         /// 
-        public float DistanceToPoint( Point point )
+        public double DistanceToPoint(Point point)
         {
-            float distance;
+            double distance;
 
             if ( !IsVertical )
             {
-                float div = (float) Math.Sqrt( k * k + 1 );
+                double div = /*(float)*/Math.Sqrt(k * k + 1);
                 distance = Math.Abs( ( k * point.X + b - point.Y ) / div );
             }
             else

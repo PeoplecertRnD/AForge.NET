@@ -65,10 +65,7 @@ namespace AForge.Imaging.Filters
             {
                 // apply the filter
                 dstImage = Apply( srcData );
-                if ( ( image.HorizontalResolution > 0 ) && ( image.VerticalResolution > 0 ) )
-                {
-                    dstImage.SetResolution( image.HorizontalResolution, image.VerticalResolution );
-                }
+                dstImage.SetResolution( image.HorizontalResolution, image.VerticalResolution );
             }
             finally
             {

@@ -17,7 +17,6 @@ namespace AForge.Math
     /// <remarks><para>The structure incapsulates elements of a 3x3 matrix and
     /// provides some operations with it.</para></remarks>
     /// 
-    [Serializable]
     public struct Matrix3x3
     {
         /// <summary>

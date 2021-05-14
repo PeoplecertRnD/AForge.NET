@@ -89,6 +89,7 @@ namespace AForge.Imaging
         public Rectangle Rectangle
         {
             get { return rect; }
+            set { rect = value; }
         }
 
         /// <summary>

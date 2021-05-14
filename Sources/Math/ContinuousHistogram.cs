@@ -8,8 +8,6 @@
 
 namespace AForge.Math
 {
-    using System;
-
     /// <summary>
     /// Histogram for continuous random values.
     /// </summary>
@@ -40,7 +38,7 @@ namespace AForge.Math
     /// </code>
     /// </remarks>
     /// 
-    [Serializable]
+    [System.Serializable]
     public class ContinuousHistogram
     {
         private int[] values;
@@ -316,7 +314,7 @@ namespace AForge.Math
 
             if ( total != 0 )
             {
-                stdDev = (float) Math.Sqrt( sum / total );
+                stdDev = (float)System.Math.Sqrt( sum / total );
             }
 
             // calculate median

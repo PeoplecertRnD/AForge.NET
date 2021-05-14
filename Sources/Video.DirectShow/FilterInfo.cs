@@ -21,13 +21,13 @@ namespace AForge.Video.DirectShow
         /// <summary>
         /// Filter name.
         /// </summary>
-        public string Name { get; private set; }
+        public readonly string Name;
 
         /// <summary>
         /// Filters's moniker string.
         /// </summary>
         /// 
-        public string MonikerString { get; private set; }
+        public readonly string MonikerString;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FilterInfo"/> class.

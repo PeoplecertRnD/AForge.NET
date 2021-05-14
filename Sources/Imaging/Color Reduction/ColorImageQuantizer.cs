@@ -184,10 +184,7 @@ namespace AForge.Imaging.ColorReduction
             try
             {
                 Bitmap result = ReduceColors( new UnmanagedImage( data ), paletteSize );
-                if ( ( image.HorizontalResolution > 0 ) && ( image.VerticalResolution > 0 ) )
-                {
-                    result.SetResolution( image.HorizontalResolution, image.VerticalResolution );
-                }
+                result.SetResolution( image.HorizontalResolution, image.VerticalResolution );
                 return result;
             }
             finally
@@ -246,10 +243,7 @@ namespace AForge.Imaging.ColorReduction
             try
             {
                 Bitmap result = ReduceColors( new UnmanagedImage( data ), palette );
-                if ( ( image.HorizontalResolution > 0 ) && ( image.VerticalResolution > 0 ) )
-                {
-                    result.SetResolution( image.HorizontalResolution, image.VerticalResolution );
-                }
+                result.SetResolution( image.HorizontalResolution, image.VerticalResolution );
                 return result;
             }
             finally

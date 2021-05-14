@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AForge.Imaging.Formats</RootNamespace>
     <AssemblyName>AForge.Imaging.Formats</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>AForge.Imaging.Formats.snk</AssemblyOriginatorKeyFile>
@@ -34,6 +34,10 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -96,6 +100,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"$(DevEnvDir)tf" resolve C:\RnD_MainCollection\Libraries\_ReleasedLibs\PeopleCert\AFORGE\AFORGE.NET_3.5\$(TargetFileName) /auto:TakeTheirs
+"$(DevEnvDir)tf" get C:\RnD_MainCollection\Libraries\_ReleasedLibs\PeopleCert\AFORGE\AFORGE.NET_3.5\$(TargetFileName) /force /overwrite 
+"$(DevEnvDir)tf" checkout C:\RnD_MainCollection\Libraries\_ReleasedLibs\PeopleCert\AFORGE\AFORGE.NET_3.5\$(TargetFileName)
+copy $(TargetFileName)  C:\RnD_MainCollection\Libraries\_ReleasedLibs\PeopleCert\AFORGE\AFORGE.NET_3.5\$(TargetFileName) /Y
+"$(DevEnvDir)tf" checkin C:\RnD_MainCollection\Libraries\_ReleasedLibs\PeopleCert\AFORGE\AFORGE.NET_3.5\$(TargetFileName)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

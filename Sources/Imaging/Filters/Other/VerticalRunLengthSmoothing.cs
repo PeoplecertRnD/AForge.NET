@@ -49,7 +49,6 @@ namespace AForge.Imaging.Filters
     public class VerticalRunLengthSmoothing : BaseInPlacePartialFilter
     {
         private int maxGapSize = 10;
-        private bool processGapsWithImageBorders = false;
 
         /// <summary>
         /// Maximum gap size to fill (in pixels).
@@ -66,22 +65,6 @@ namespace AForge.Imaging.Filters
         {
             get { return maxGapSize; }
             set { maxGapSize = Math.Max( 1, Math.Min( 1000, value ) ); }
-        }
-
-        /// <summary>
-        /// Process gaps between objects and image borders or not.
-        /// </summary>
-        /// 
-        /// <remarks><para>The property sets if gaps between image borders and objects must be treated as
-        /// gaps between objects and also filled.</para>
-        /// 
-        /// <para>Default value is set to <see langword="false"/>.</para>
-        /// </remarks>
-        /// 
-        public bool ProcessGapsWithImageBorders
-        {
-            get { return processGapsWithImageBorders; }
-            set { processGapsWithImageBorders = value; }
         }
 
         // private format translation dictionary
@@ -141,7 +124,6 @@ namespace AForge.Imaging.Filters
             for ( int x = startX; x < stopX; x++ )
             {
                 byte* ptr = basePtr;
-                byte* columnStartPtr = ptr;
                 byte* columnEndPtr = ptr + stride * height;
 
                 // fill gaps between white pixels
@@ -160,14 +142,10 @@ namespace AForge.Imaging.Filters
                     // fill the gap between white areas
                     if ( gapSize <= maxGapSize )
                     {
-                        if ( ( processGapsWithImageBorders ) ||
-                           ( ( gapStart != columnStartPtr ) && ( ptr != columnEndPtr ) ) )
+                        while ( gapStart < ptr )
                         {
-                            while ( gapStart < ptr )
-                            {
-                                *gapStart = 255;
-                                gapStart += stride;
-                            }
+                            *gapStart = 255;
+                            gapStart += stride;
                         }
                     }
 
